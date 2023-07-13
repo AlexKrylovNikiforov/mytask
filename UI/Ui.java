@@ -81,7 +81,6 @@ public class Ui {
                     for (Map.Entry<Product, Integer> entry : currentClient.getBasket().entrySet()) {
                         Product currentProduct = entry.getKey();
                         List<Cashier> cashiersList = cashierService.getCashiersList();
-                        Cashier cashierByProductType = shopService.getCashierByProductType(cashiersList, currentProduct.getProductType());
                         double price = cashierService.scanProduct(currentProduct);
                         totalPrice += price;
                         shopService.updateWarehouse(currentProduct, entry.getValue());
