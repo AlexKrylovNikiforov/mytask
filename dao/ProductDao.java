@@ -1,7 +1,7 @@
 package mytask.dao;
 
-import mytask.data.Product;
-import mytask.data.ProductType;
+import mytask.domain.Product;
+import mytask.type.ProductType;
 import mytask.exception.ProductNotFoundException;
 
 import java.io.BufferedReader;

@@ -1,10 +1,10 @@
 package mytask.UI;
 
 import mytask.dao.ClientDao;
-import mytask.data.Cashier;
-import mytask.data.Client;
-import mytask.data.Product;
-import mytask.data.Shop;
+import mytask.domain.Cashier;
+import mytask.domain.Client;
+import mytask.domain.Product;
+import mytask.domain.Shop;
 import mytask.exception.CashierNotFoundException;
 import mytask.service.CashierService;
 import mytask.service.ClientService;
@@ -26,14 +26,20 @@ public class Ui {
     private final Printer printer = new Printer();
     private Client currentClient;
 
+    // TODO: Так как у тебя метод называется initialize, то он должен подготавливать всё для работы, но не более того.
+    //  Инициализируй всякие магазины, склады и т.д., но убери лишнее, например список продуктов.
+    //  Также обрат внимание, что ты создаёшь магазин, но потом его никак не используешь.
     public void initializeApp() throws FileNotFoundException, CashierNotFoundException {
-        currentClient = initializeClient();
+        Client currentClient = initializeClient();
+        clientService = new ClientService(currentClient);
+
         List<Product> productList = productService.getProductList();
         List<Cashier> cashierList = cashierService.getCashiersList();
         Map<Product, Integer> currentWarehouse = shopService.getCurrentWarehouse();
         Shop shop = shopService.createNewShop(currentWarehouse);
         shop.setCashierList(cashierList);
     }
+
     public void start() throws FileNotFoundException, CashierNotFoundException {
         Map<Product, Integer> currentWarehouse;
         Scanner sc = new Scanner(System.in);
@@ -118,7 +124,7 @@ public class Ui {
         System.out.println("Please enter 1 for existing ID or 2 for create new client");
         Scanner sc = new Scanner(System.in);
         int choice = sc.nextInt();
-        while (sc.hasNextInt()) {
+//        while (sc.hasNextInt()) {
             if (choice == 1) {
                 System.out.println("Currently registered clients: " + clientService.getClientsList().size());
                 System.out.println("Please, enter your ID:\n");
@@ -130,7 +136,7 @@ public class Ui {
             } else {
                 System.out.println("You entered wrong value, the value must be 1 or 2");
             }
-        }
+//        }
         return currentClient;
     }
 

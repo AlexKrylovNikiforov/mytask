@@ -1,13 +1,13 @@
-1; "Beef"; "MEAT"; 13.00
-2; "Pork"; "MEAT"; 11.00
-3; "Chicken"; "MEAT"; 7.50
-4; "Orange"; "FRUIT"; 3.00
-5; "Apple"; "FRUIT"; 2.50
-6; "Watermelon"; "FRUIT"; 4.00
-7; "Tomato"; "VEGETABLE"; 1.70
-8; "Potato"; "VEGETABLE"; 1.20
-9; "Onion"; "VEGETABLE"; 0.85
-10; "Whiskey"; "ALCOHOL"; 23.00
-11; "Marlboro"; "TOBACCO"; 6.50
-12; "Tuna"; "FISH"; 5.50
-13; "Salmon"; "FISH"; 7.00
+1;Beef;MEAT;13.00
+2;Pork;MEAT;11.00
+3;Chicken;MEAT;7.50
+4;Orange;FRUIT;3.00
+5;Apple;FRUIT;2.50
+6;Watermelon;FRUIT;4.00
+7;Tomato;VEGETABLE;1.70
+8;Potato;VEGETABLE;1.20
+9;Onion;VEGETABLE;0.85
+10;Whiskey;ALCOHOL;23.00
+11;Marlboro;TOBACCO;6.50
+12;Tuna;FISH;5.50
+13;Salmon;FISH;7.00

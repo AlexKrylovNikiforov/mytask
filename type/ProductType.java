@@ -1,4 +1,4 @@
-package mytask.data;
+package mytask.type;
 
 public enum ProductType {
     ALCOHOL(1, "Alcoholic beverages and beer"),

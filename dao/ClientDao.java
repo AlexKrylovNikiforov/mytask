@@ -1,8 +1,7 @@
 package mytask.dao;
 
-import mytask.data.Cashier;
-import mytask.data.Client;
-import mytask.data.Product;
+import mytask.domain.Client;
+import mytask.domain.Product;
 import mytask.exception.ClientNotFoundException;
 
 import java.io.*;

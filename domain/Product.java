@@ -1,4 +1,6 @@
-package mytask.data;
+package mytask.domain;
+
+import mytask.type.ProductType;
 
 public class Product {
     private final long id;

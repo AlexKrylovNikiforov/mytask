@@ -1,12 +1,11 @@
 package mytask.service;
 
 import mytask.dao.CashierDao;
-import mytask.data.Cashier;
-import mytask.data.Product;
+import mytask.domain.Cashier;
+import mytask.domain.Product;
 import mytask.exception.CashierNotFoundException;
 
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class CashierService {

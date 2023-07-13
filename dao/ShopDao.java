@@ -1,7 +1,6 @@
 package mytask.dao;
 
-import mytask.data.Product;
-import mytask.data.Shop;
+import mytask.domain.Product;
 import mytask.service.ProductService;
 
 import java.io.*;

@@ -1,4 +1,6 @@
-package mytask.data;
+package mytask.domain;
+
+import mytask.type.ProductType;
 
 import java.util.List;
 

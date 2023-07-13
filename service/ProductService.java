@@ -1,7 +1,7 @@
 package mytask.service;
 
 import mytask.dao.ProductDao;
-import mytask.data.Product;
+import mytask.domain.Product;
 import mytask.exception.ProductNotFoundException;
 
 import java.util.List;

@@ -1,8 +1,8 @@
 package mytask.service;
 
 import mytask.dao.ClientDao;
-import mytask.data.Client;
-import mytask.data.Product;
+import mytask.domain.Client;
+import mytask.domain.Product;
 import mytask.exception.BalanceWrongValueException;
 import mytask.exception.ClientNotFoundException;
 import mytask.validation.ClientValidator;

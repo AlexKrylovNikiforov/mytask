@@ -1,7 +1,7 @@
 package mytask.UI;
 
-import mytask.data.Client;
-import mytask.data.Product;
+import mytask.domain.Client;
+import mytask.domain.Product;
 
 import java.util.Map;
 

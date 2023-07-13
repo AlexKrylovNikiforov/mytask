@@ -1,9 +1,7 @@
-package mytask.data;
+package mytask.domain;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 public class Client {
     private final Long id;

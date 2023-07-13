@@ -1,5 +1,6 @@
 package mytask.exception;
 
+// TODO: Better extend RuntimeException
 public class ProductNotFoundException extends Exception {
 
     public ProductNotFoundException(String message) {

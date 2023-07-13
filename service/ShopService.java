@@ -1,10 +1,10 @@
 package mytask.service;
 
 import mytask.dao.ShopDao;
-import mytask.data.Cashier;
-import mytask.data.Product;
-import mytask.data.ProductType;
-import mytask.data.Shop;
+import mytask.domain.Cashier;
+import mytask.domain.Product;
+import mytask.type.ProductType;
+import mytask.domain.Shop;
 import mytask.exception.CashierNotFoundException;
 import mytask.validation.ProductValidatorByCount;
 import mytask.validation.ProductValidatorByName;
