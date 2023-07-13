@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ProductDao {
-    private static final Path DB_PATH = Path.of("product_table.txt");
+    private static final Path DB_PATH = Path.of("product_db.txt");
 
     ProductType productType;
 
