@@ -46,39 +46,39 @@ public class Ui {
                 System.out.println("BYE, HOPE WE'LL SEE YOU AGAIN!");
                 break;
             }
-            switch(choice) {
-                case 1:
+            switch (choice) {
+                case 1 -> {
                     currentWarehouse = shopService.getCurrentWarehouse();
-                    for(Map.Entry<Product, Integer> entry: currentWarehouse.entrySet()) {
+                    for (Map.Entry<Product, Integer> entry : currentWarehouse.entrySet()) {
                         String name = entry.getKey().getName();
                         int count = entry.getValue();
                         double price = entry.getKey().getPrice();
                         System.out.printf("%s: %d, Price: %f EUR%n", name, count, price);
                     }
-                    break;
-                case 2:
+                }
+                case 2 -> {
                     Map<Product, Integer> currentClientBasket = clientService.getClientBasket();
                     printer.printBasket(currentClientBasket);
-                    break;
-                case 3:
+                }
+                case 3 -> {
                     Product newProduct;
                     while (!sc.next().equalsIgnoreCase("Q")) {
                         System.out.println("Please enter product name or enter Q to exit to main menu:\n");
                         String name = sc.nextLine();
-                        if(shopService.isProductInWarehouse(name)) {
+                        if (shopService.isProductInWarehouse(name)) {
                             System.out.println("Please enter product count:\n");
                             int count = sc.nextInt();
-                            if(shopService.isProductCountEnough(name, count)) {
+                            if (shopService.isProductCountEnough(name, count)) {
                                 newProduct = shopService.getProductByName(name);
                                 clientService.addProductToBasket(currentClient, newProduct, count);
                                 shopService.updateWarehouse(newProduct, count);
                             }
                         }
                     }
-                    break;
-                case 4:
+                }
+                case 4 -> {
                     double totalPrice = 0.0;
-                    for(Map.Entry<Product, Integer> entry: currentClient.getBasket().entrySet()) {
+                    for (Map.Entry<Product, Integer> entry : currentClient.getBasket().entrySet()) {
                         Product currentProduct = entry.getKey();
                         List<Cashier> cashiersList = cashierService.getCashiersList();
                         Cashier cashierByProductType = shopService.getCashierByProductType(cashiersList, currentProduct.getProductType());
@@ -87,8 +87,8 @@ public class Ui {
                         shopService.updateWarehouse(currentProduct, entry.getValue());
                     }
                     clientService.payForProducts(currentClient, totalPrice);
-                    break;
-                case 5:
+                }
+                case 5 -> {
                     double cashBack = 0.0;
                     while (!sc.next().equalsIgnoreCase("Q")) {
                         printer.printBasket(currentClient.getBasket());
@@ -102,6 +102,7 @@ public class Ui {
                         cashBack += price;
                     }
                     clientService.updateClientBalance(currentClient, cashBack);
+                }
             }
         }
     }
