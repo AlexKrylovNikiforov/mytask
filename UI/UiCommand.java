@@ -2,13 +2,12 @@ package mytask.UI;
 
 public enum UiCommand {
 
-    ENTER_ID(0, "Enter ID for existing client"),
-    NEW_CLIENT(1, "Enter ID or select New client"),
-    SHOW_PRODUCTS(2, "Show products in shop"),
-    SHOW_BASKET(3, "Go to your basket"),
-    BUY_PRODUCTS(4, "Start buying"),
+    SHOW_PRODUCTS(1, "Show products in shop"),
+    SHOW_BASKET(2, "Go to your basket"),
+    ADD_PRODUCTS(3, "Add products to basket"),
+    BUY_PRODUCTS(4, "Proceed to payment"),
     RETURN_PRODUCTS(5, "Return products"),
-    EXIT_ANYTIME(6, "Exit app");
+    EXIT_ANYTIME(0, "Exit app");
 
     private final int label;
 

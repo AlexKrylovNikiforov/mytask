@@ -1,0 +1,5 @@
+1; "Stewart"; {"MEAT", "FISH", "ALCOHOL", "TOBACCO"}
+1; "Susie", {"MEAT", "FISH", "FRUIT", "VEGETABLE"}
+1; "Amber", {"MEAT", "FISH", "FRUIT"}
+1; "Kitty", {"ALCOHOL", "TOBACCO"}
+1; "Fred", {"MEAT", "FRUIT", "ALCOHOL"}

@@ -1,13 +1,11 @@
 package mytask.dao;
 
+import mytask.data.Cashier;
 import mytask.data.Client;
 import mytask.data.Product;
-import mytask.exception.NoClientFoundException;
+import mytask.exception.ClientNotFoundException;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -18,7 +16,7 @@ public class ClientDao {
     private static final Path DB_PATH = Path.of("client_db.txt");
     private final ProductDao productDao = new ProductDao();
 
-    public Client findClientById(Long id) throws NoClientFoundException {
+    public Client findClientById(Long id) throws ClientNotFoundException {
         Client client = null;
 
         try {
@@ -27,18 +25,19 @@ public class ClientDao {
 
             while ((line = br.readLine()) != null) {
                 String[] currentClient = line.split(";");
-                Long clientId = Long.parseLong(currentClient[0]);
+                long clientId = Long.parseLong(currentClient[0]);
 
-                if (clientId.equals(id)) {
+                if (id == clientId) {
+                    String name = currentClient[1];
                     double balance = Double.parseDouble(currentClient[2]);
-                    client = new Client(clientId, currentClient[1], balance);
+                    client = new Client(clientId, name, balance);
                     break;
                 }
             }
             br.close();
 
             if (client == null) {
-                throw new NoClientFoundException("No client found with the given ID: " + id);
+                throw new ClientNotFoundException("No client found with the given ID: " + id);
             }
         } catch (IOException e) {
             System.out.println(Arrays.toString(e.getStackTrace()));
@@ -65,30 +64,75 @@ public class ClientDao {
                 Long clientId = Long.parseLong(clientData[0]);
                 currentIds.add(clientId);
             }
-
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         return currentIds;
     }
-    public void showClientBasket(Client client) {
-        Map<Product, Integer> currentBasket = client.getBasket();
-        double totalPrice = 0.0;
-        for (Map.Entry<Product, Integer> entry : currentBasket.entrySet()) {
-            String name = entry.getKey().getName();
-            int count = entry.getValue();
-            double price = entry.getKey().getPrice();
-            System.out.printf("%s: %d, Price: %f EUR%n", name, count, price);
-            totalPrice += price;
+    public void updateClientsBasket(Client client, Map<Product, Integer> newBasket) {
+        client.setBasket(newBasket);
+        updateClientData(client);
+    }
+
+    public void addProductToBasket(Product product, int count) {
+        Map<Product, Integer> basket = getClientBasket();
+        if (basket.containsKey(product)) {
+            basket.put(product, basket.get(product) + count);
+        } else {
+            basket.put(product, count);
         }
-        System.out.printf("Total price: %f EUR%n", totalPrice);
-
     }
-    public void updateBasket(Product product, int count) {
-    }
-
     public Map<Product, Integer> getClientBasket() {
         return null;
     }
+    private void updateClientData(Client client) {
+        try {
+            File inputFile = DB_PATH.toFile();
+            File tempFile = new File("temp.txt");
+
+            BufferedReader br = new BufferedReader(new FileReader(inputFile));
+            BufferedWriter bw = new BufferedWriter(new FileWriter(tempFile));
+
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] clientData = line.split(";");
+                long id = Long.parseLong(clientData[0]);
+                if (id == client.getId()) {
+                    line = client.getId() + ";" + client.getName() + ";" + client.getBalance();
+                }
+                bw.write(line);
+                bw.newLine();
+            }
+            br.close();
+            bw.close();
+
+            if (inputFile.delete()) {
+                tempFile.renameTo(inputFile);
+            } else {
+                throw new IOException("Не удалось обновить данные клиента");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public List<Client> getClientList () {
+        List<Client> currentClients = new ArrayList<>();
+        try (BufferedReader br = new BufferedReader(new FileReader(DB_PATH.toFile()))) {
+            String line;
+
+            while ((line = br.readLine()) != null) {
+                String[] clientData = line.split(";");
+                Long clientId = Long.parseLong(clientData[0]);
+                String clientName = clientData[1];
+                double clientBalance = Double.parseDouble(clientData[2]);
+                Client newClient = new Client(clientId, clientName, clientBalance);
+                currentClients.add(newClient);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return currentClients;
+    }
+
 }

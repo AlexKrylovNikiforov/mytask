@@ -1,14 +1,23 @@
 package mytask.data;
 
+import java.util.List;
 import java.util.Map;
 
 public class Shop {
-    private Long id;
 
-    private Map<Product, Integer> warehouse;
+    private final Map<Product, Integer> warehouse;
 
-    public Shop(Long id, Map<Product, Integer> warehouse) {
-        this.id = id;
+    private List<Cashier> cashierList;
+
+    public Shop(Map<Product, Integer> warehouse) {
         this.warehouse = warehouse;
+    }
+
+    public List<Cashier> getCashierList() {
+        return cashierList;
+    }
+
+    public void setCashierList(List<Cashier> cashierList) {
+        this.cashierList = cashierList;
     }
 }

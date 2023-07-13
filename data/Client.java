@@ -36,4 +36,12 @@ public class Client {
     public Map<Product, Integer> getBasket () {
         return basket;
     }
+
+    public void setBasket(Map<Product, Integer> basket) {
+        this.basket = basket;
+    }
+
+    public void setBalance(double balance) {
+        this.balance = balance;
+    }
 }
