@@ -7,7 +7,7 @@ public class Shop {
 
     private final Map<Product, Integer> warehouse;
 
-    private List<Cashier> cashierList;
+    private final List<Cashier> cashierList;
 
     public Shop(List<Cashier> cashierList, Map<Product, Integer> warehouse) {
         this.cashierList = cashierList;
@@ -16,6 +16,10 @@ public class Shop {
 
     public List<Cashier> getCashierList() {
         return cashierList;
+    }
+
+    public Map<Product, Integer> getWarehouse() {
+        return warehouse;
     }
 }
 

@@ -48,17 +48,17 @@ public class ShopDao {
     }
 
     public void updateCurrentWarehouse(Product product, int count) {
-        Map<Product, Integer> currentWarehouse = getCurrentWarehouse();
-        currentWarehouse.put(product, count);
+        getCurrentWarehouse().put(product, count);
     }
 
-    public void saveWarehouse(Map<Product, Integer> warehouse) {
+    public void saveWarehouse() {
+        Map<Product, Integer> warehouse = getCurrentWarehouse();
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(DB_PATH.toFile()))) {
             for (Map.Entry<Product, Integer> entry : warehouse.entrySet()) {
                 Product product = entry.getKey();
                 int count = entry.getValue();
-
-                bw.write(product.getId() + "; " + count);
+                String productData = (product.getId() + ";" + product.getName() + ";" + product.getProductType() + ";" + String.format("%.2f", product.getPrice()) + count);
+                bw.write(productData);
                 bw.newLine();
             }
         } catch (IOException e) {

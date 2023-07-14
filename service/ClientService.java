@@ -52,14 +52,11 @@ public class ClientService {
         System.out.println("Please enter your name:");
         String currentName = sc.nextLine();
         System.out.println("Please enter your balance amount:");
-        double currentBalance = 0;
-        while (true) {
-            currentBalance = sc.nextDouble();
-            if(currentBalance < 1000) {
-                return new Client(currentId, currentName, currentBalance);
-            } else {
-                throw new BalanceWrongValueException("Balance amount must be less than 1000 EUR");
-            }
+        double currentBalance = sc.nextDouble();
+        if(currentBalance < 1000) {
+            return new Client(currentId, currentName, currentBalance);
+        } else {
+            throw new BalanceWrongValueException("Balance amount must be less than 1000 EUR");
         }
     }
 
@@ -67,17 +64,17 @@ public class ClientService {
         return clientDao.getIdList().size() + 1;
     }
 
-    public Map<Product, Integer> getClientBasket() {
-        return clientDao.getClientBasket();
+    public Map<Product, Integer> getClientBasket(Client client) {
+        return clientDao.getClientBasket(client);
     }
 
     public void addProductToBasket(Client client, Product product, int count) {
-        Map<Product, Integer> clientBasket = clientDao.getClientBasket();
-        clientDao.addProductToBasket(product, count);
+        Map<Product, Integer> clientBasket = getClientBasket(client);
+        clientDao.addProductToBasket(client, product, count);
         clientDao.updateClientsBasket(client, clientBasket);
     }
-    public void removeProductFromBasket(Product product, int count) {
-        clientDao.getClientBasket().put(product, count);
+    public void removeProductFromBasket(Client client, Product product, int count) {
+        clientDao.getClientBasket(client).put(product, count);
     }
 
     public List<Client> getClientsList() {

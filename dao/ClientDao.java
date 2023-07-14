@@ -74,16 +74,16 @@ public class ClientDao {
         updateClientData(client);
     }
 
-    public void addProductToBasket(Product product, int count) {
-        Map<Product, Integer> basket = getClientBasket();
+    public void addProductToBasket(Client client, Product product, int count) {
+        Map<Product, Integer> basket = getClientBasket(client);
         if (basket.containsKey(product)) {
             basket.put(product, basket.get(product) + count);
         } else {
             basket.put(product, count);
         }
     }
-    public Map<Product, Integer> getClientBasket() {
-        return null;
+    public Map<Product, Integer> getClientBasket(Client client) {
+        return client.getBasket();
     }
     private void updateClientData(Client client) {
         try {

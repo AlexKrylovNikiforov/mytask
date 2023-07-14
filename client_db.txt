@@ -1,6 +1,6 @@
-1;John;355.00
-2;Carlos;230.00
-3;Andrew;750.00
-4;Johanna;675.00
+1;John;355.0
+2;Carlos;230.0
+3;Andrew;750.0
+4;Johanna;675.0
 5;Maite;810.00
 6;Ronald;560.00
