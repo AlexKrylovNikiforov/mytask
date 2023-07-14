@@ -1,17 +1,16 @@
 package mytask.dao;
 
 import mytask.data.Cashier;
-import mytask.data.Client;
+import mytask.data.Product;
 import mytask.data.ProductType;
 import mytask.exception.CashierNotFoundException;
 
-import java.io.BufferedReader;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.List;
 
 public class CashierDao {
@@ -23,27 +22,29 @@ public class CashierDao {
     public CashierDao() {
     }
 
-    public List<Cashier> getCashiersList() throws CashierNotFoundException, FileNotFoundException {
-        try (BufferedReader br = new BufferedReader(new FileReader(DB_PATH.toFile()))) {
-            String line;
-            List<ProductType> productTypes = new ArrayList<>();
-            while ((line = br.readLine()) != null) {
-                String[] cashierData = line.split(";");
-                long cashierId = Long.parseLong(cashierData[0]);
-                String cashierName = cashierData[1];
-                String [] productTypesData = cashierData[2].split(",");
-                for(String productTypeData: productTypesData) {
-                    ProductType productType = mytask.data.ProductType.valueOf(productTypeData);
-                    productTypes.add(productType);
-                }
-                Cashier newCashier = new Cashier(cashierId, cashierName, productTypes);
-                currentCashiers.add(newCashier);
-            }
+    public List<Cashier> getCashiersList() {
+        List<String> cashierLines = null;
+        try {
+            cashierLines = Files.readAllLines(DB_PATH);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        return currentCashiers;
-    }
+        List<Cashier> allCashiers = new ArrayList<>();
+        for(String cashierLine: cashierLines) {
+            String [] currentCashier = cashierLine.split(";");
+            long id = Long.parseLong(currentCashier[0]);
+            String name = currentCashier[1];
+            String[] productTypes = currentCashier[2].split(",");
+            List<ProductType> currentProductTypes = new ArrayList<>();
+            for (int i = 0; i < productTypes.length; i++) {
+                ProductType productType = ProductType.valueOf(productTypes[i]);
+                currentProductTypes.add(productType);
+            }
+            Cashier newCashier = new Cashier(id, name, currentProductTypes);
+            allCashiers.add(newCashier);
+        }
+        return allCashiers;
+}
 
     public Cashier getCashierById(long id) throws CashierNotFoundException {
         try {

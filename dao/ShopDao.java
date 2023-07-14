@@ -1,31 +1,35 @@
 package mytask.dao;
 
 import mytask.data.Product;
+import mytask.data.ProductType;
 import mytask.data.Shop;
 import mytask.service.ProductService;
 
 import java.io.*;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class ShopDao {
 
-    private static final Path DB_PATH = Path.of("warehouse_db.txt");
-    private final ProductService productService = new ProductService();
+    private static final Path DB_PATH = Path.of("product_db.txt");
 
 
     public Map<Product, Integer> getCurrentWarehouse() {
         Map<Product, Integer> currentWarehouse = new HashMap<>();
         try {
-            BufferedReader br = new BufferedReader(new FileReader(DB_PATH.toFile()));
-            String line;
-            while((line = br.readLine()) != null) {
-                String [] products = line.split(";");
+            List<String> productLines = Files.readAllLines(DB_PATH);
+            for(String productLine: productLines) {
+                String [] products = productLine.split(";");
                 long id = Long.parseLong(products[0]);
-                int count = Integer.parseInt(products[1]);
-                Product currentProduct = productService.getProductById(id);
+                String name = products[1];
+                ProductType productType = ProductType.valueOf(products[2]);
+                double price = Double.parseDouble(products[3]);
+                int count = Integer.parseInt(products[4]);
+                Product currentProduct = new Product(id, name, productType, price);
                 currentWarehouse.put(currentProduct, count);
             }
         } catch (IOException e) {

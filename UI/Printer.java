@@ -18,6 +18,10 @@ public class Printer {
     }
 
     protected void printBasket(Map<Product, Integer> basket) {
+        if(basket == null) {
+            System.out.println("Your basket is empty");
+            return;
+        }
         double totalPrice = 0.0;
         for (Map.Entry<Product, Integer> entry : basket.entrySet()) {
             String name = entry.getKey().getName();

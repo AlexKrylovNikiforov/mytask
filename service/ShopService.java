@@ -6,9 +6,8 @@ import mytask.data.Product;
 import mytask.data.ProductType;
 import mytask.data.Shop;
 import mytask.exception.CashierNotFoundException;
-import mytask.validation.ProductValidatorByCount;
-import mytask.validation.ProductValidatorByName;
 
+import java.io.FileNotFoundException;
 import java.util.List;
 import java.util.Map;
 
@@ -16,20 +15,36 @@ public class ShopService {
 
     private final ShopDao shopDao = new ShopDao();
 
-    private final ProductValidatorByCount validatorByCount = new ProductValidatorByCount();
-
-    private final ProductValidatorByName validatorByName = new ProductValidatorByName();
-
     public Map<Product, Integer> getCurrentWarehouse() {
         return shopDao.getCurrentWarehouse();
     }
-
+    public Shop initializeShop() {
+        CashierService cashierService = new CashierService();
+        Shop shop = null;
+        try {
+            List<Cashier> cashierList = cashierService.getCashiersList();
+            shop = new Shop(cashierList, getCurrentWarehouse());
+        } catch (FileNotFoundException | CashierNotFoundException e) {
+            System.out.println(e.getMessage());
+        }
+        return shop;
+    }
     public boolean isProductInWarehouse(String productName) {
-        return validatorByName.validateProductByName(productName);
+        for(Map.Entry<Product, Integer> entry: getCurrentWarehouse().entrySet()) {
+            if(entry.getKey().getName().equalsIgnoreCase(productName)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public boolean isProductCountEnough(String name, int count) {
-        return validatorByCount.validateProductByCount(name, count);
+        for(Map.Entry<Product, Integer> entry: getCurrentWarehouse().entrySet()) {
+            if(isProductInWarehouse(entry.getKey().getName())) {
+                return count <= entry.getValue();
+            }
+        }
+        return false;
     }
 
     public Product getProductByName(String name) {
@@ -40,10 +55,6 @@ public class ShopService {
         shopDao.updateCurrentWarehouse(newProduct, count);
         Map<Product, Integer> currentWarehouse1 = shopDao.getCurrentWarehouse();
         shopDao.saveWarehouse(currentWarehouse1);
-    }
-
-    public Shop createNewShop(Map<Product, Integer> warehouse) {
-        return new Shop(warehouse);
     }
 
     public Cashier getCashierByProductType(List<Cashier> cashierList, ProductType productType) throws CashierNotFoundException {

@@ -5,27 +5,40 @@ import mytask.data.Client;
 import mytask.data.Product;
 import mytask.exception.BalanceWrongValueException;
 import mytask.exception.ClientNotFoundException;
-import mytask.validation.ClientValidator;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 
 public class ClientService {
     ClientDao clientDao = new ClientDao();
-    ClientValidator clientValidator = new ClientValidator();
 
-    public Client createNewClient(long currentId, String currentName, double currentBalance) {
-        Client newClient = new Client(currentId, currentName, currentBalance);
-        try {
-            clientValidator.validateBalance(newClient.getBalance());
-        } catch (BalanceWrongValueException e) {
-            System.out.println(e.getMessage());
+    public Client initializeClient() {
+        Client currentClient = null;
+        System.out.println("Please enter 1 for existing ID or 2 for create new client");
+        Scanner sc = new Scanner(System.in);
+        int choice = sc.nextInt();
+        if (choice == 1) {
+            System.out.println("Please, enter your ID:");
+            long id = sc.nextLong();
+            currentClient = logIn(id);
+            return currentClient;
+        } else if (choice == 2) {
+            try {
+                currentClient = signIn();
+            } catch (BalanceWrongValueException e) {
+                System.out.println(e.getMessage());;
+            }
+        } else {
+            System.out.println("You entered wrong value, the value must be 1 or 2");
         }
-        clientDao.save(newClient);
-        return newClient;
+        return currentClient;
     }
 
-    public Client getClientById(Long id) {
+    private Client logIn(long id) {
+        return getClientById(id);
+    }
+    private Client getClientById(Long id) {
         try {
             return clientDao.findClientById(id);
         } catch (ClientNotFoundException e) {
@@ -33,8 +46,24 @@ public class ClientService {
         }
         return null;
     }
+    private Client signIn() throws BalanceWrongValueException {
+        Scanner sc = new Scanner(System.in);
+        long currentId = assignId();
+        System.out.println("Please enter your name:");
+        String currentName = sc.nextLine();
+        System.out.println("Please enter your balance amount:");
+        double currentBalance = 0;
+        while (true) {
+            currentBalance = sc.nextDouble();
+            if(currentBalance < 1000) {
+                return new Client(currentId, currentName, currentBalance);
+            } else {
+                throw new BalanceWrongValueException("Balance amount must be less than 1000 EUR");
+            }
+        }
+    }
 
-    public int assignId() {
+    private int assignId() {
         return clientDao.getIdList().size() + 1;
     }
 
@@ -59,7 +88,7 @@ public class ClientService {
         client.setBalance(amount);
     }
     public void payForProducts(Client client, double totalPrice) {
-        if(clientValidator.isBalanceEnough(client.getBalance(), totalPrice)) {
+        if(client.getBalance() < totalPrice) {
             double newBalance = client.getBalance() - totalPrice;
             client.setBalance(newBalance);
             clientDao.update(client);

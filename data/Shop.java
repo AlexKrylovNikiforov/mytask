@@ -9,15 +9,13 @@ public class Shop {
 
     private List<Cashier> cashierList;
 
-    public Shop(Map<Product, Integer> warehouse) {
+    public Shop(List<Cashier> cashierList, Map<Product, Integer> warehouse) {
+        this.cashierList = cashierList;
         this.warehouse = warehouse;
     }
 
     public List<Cashier> getCashierList() {
         return cashierList;
     }
-
-    public void setCashierList(List<Cashier> cashierList) {
-        this.cashierList = cashierList;
-    }
 }
+
