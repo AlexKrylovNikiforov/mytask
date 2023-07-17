@@ -8,7 +8,6 @@ public class Main {
     private static final Ui ui = new Ui();
 
     public static void main(String[] args) throws FileNotFoundException, CashierNotFoundException {
-        ui.initializeApp();
         ui.start();
     }
 

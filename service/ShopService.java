@@ -5,10 +5,9 @@ import mytask.data.*;
 import mytask.exception.CashierNotFoundException;
 
 import java.io.FileNotFoundException;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Scanner;
+
 
 public class ShopService {
 
@@ -17,17 +16,17 @@ public class ShopService {
     public Map<Product, Integer> getCurrentWarehouse() {
         return shopDao.getCurrentWarehouse();
     }
-    public Shop initializeShop() {
-        CashierService cashierService = new CashierService();
-        Shop shop = null;
-        try {
-            List<Cashier> cashierList = cashierService.getCashiersList();
-            shop = new Shop(cashierList, getCurrentWarehouse());
-        } catch (FileNotFoundException | CashierNotFoundException e) {
-            System.out.println(e.getMessage());
-        }
-        return shop;
-    }
+//    public Shop initializeShop() {
+//        CashierService cashierService = new CashierService();
+//        Shop shop = null;
+//        try {
+//            List<Cashier> cashierList = cashierService.getCashiersList();
+//            shop = new Shop(cashierList, getCurrentWarehouse());
+//        } catch (FileNotFoundException | CashierNotFoundException e) {
+//            System.out.println(e.getMessage());
+//        }
+//        return shop;
+//    }
     public boolean isProductInWarehouse(String productName) {
         for(Map.Entry<Product, Integer> entry: getCurrentWarehouse().entrySet()) {
             if(entry.getKey().getName().equalsIgnoreCase(productName)) {
@@ -46,6 +45,17 @@ public class ShopService {
         return false;
     }
 
+    public int  getCurrentProductCount(Product product) {
+        int currentCount = 0;
+        for(Map.Entry<Product, Integer> entry: getCurrentWarehouse().entrySet()) {
+            if (entry.getKey().getName().equalsIgnoreCase(product.getName())) {
+                currentCount = entry.getValue();
+            }
+        }
+        return currentCount;
+    }
+
+
     public Product getProductByName(String name) {
         return shopDao.getProductByName(name);
     }
@@ -55,53 +65,23 @@ public class ShopService {
         //shopDao.saveWarehouse();
     }
 
-    public void processPayment(Client client) throws FileNotFoundException, CashierNotFoundException {
+    public void processPayment(Client client) {
         CashierService cashierService = new CashierService();
         ClientService clientService = new ClientService();
         double totalPrice = 0.0;
         for(Map.Entry<Product, Integer> entry: client.getBasket().entrySet()) {
             Product currentProduct = entry.getKey();
-            List<Cashier> cashiers = cashierService.getCashiersList();
-            Cashier currentCashier = getCashierByProductType(cashiers, currentProduct.getProductType());
             totalPrice += cashierService.scanProduct(currentProduct);
         }
         clientService.updateClientBalance(client, totalPrice);
     }
 
-    private Cashier getCashierByProductType(List<Cashier> cashierList, ProductType productType) throws CashierNotFoundException {
-        for(Cashier cashier: cashierList) {
-            if(cashier.getProductTypes().contains(productType)) {
-                return cashier;
-            }
-        }
-        return null;
-    }
-
-    public void getProductToTransferToClient(Client client) {
-        Product newProduct;
-        String reply;
-        Scanner sc = new Scanner(System.in);
-        ClientService cs = new ClientService();
-        do {
-            System.out.println("Please enter product name or enter Q to exit to the main menu: ");
-            reply = sc.nextLine();
-
-            if (reply.equalsIgnoreCase("Q")) {
-                break;
-            }
-            newProduct = getProductByName(reply);
-            boolean productInWarehouse = isProductInWarehouse(reply);
-            if (productInWarehouse) {
-                System.out.println("Please enter product count: ");
-                int count = Integer.parseInt(sc.nextLine());
-                boolean productCountEnough = isProductCountEnough(newProduct, count);
-                if (productCountEnough) {
-                    cs.addProductToBasket(client, newProduct, count);
-                    updateWarehouse(newProduct, count);
-                } else {
-                    System.out.println("Not enough product in warehouse");
-                }
-            }
-        } while (!reply.equalsIgnoreCase("Q"));
-    }
+//    private Cashier getCashierByProductType(List<Cashier> cashierList, ProductType productType) throws CashierNotFoundException {
+//        for(Cashier cashier: cashierList) {
+//            if(cashier.getProductTypes().contains(productType)) {
+//                return cashier;
+//            }
+//        }
+//        return null;
+//    }
 }

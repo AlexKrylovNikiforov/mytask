@@ -12,9 +12,10 @@ public class Printer {
         System.out.printf("ID: %d%nName: %s%nBalance: %.2f%n", client.getId(), client.getName(), client.getBalance());
     }
 
-    protected void printProduct(Product product) {
+    protected void printProduct(Product product, int count) {
         System.out.println("****** PRODUCT INFO ******");
         System.out.printf("Name: %s%nPrice: %.2f%n", product.getName(), product.getPrice());
+        System.out.println("Current count: " + count);
     }
 
     protected void printBasket(Map<Product, Integer> basket) {

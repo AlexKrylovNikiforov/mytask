@@ -1,7 +1,6 @@
 package mytask.UI;
 
 import mytask.dao.ClientDao;
-import mytask.data.Cashier;
 import mytask.data.Client;
 import mytask.data.Product;
 import mytask.data.Shop;
@@ -18,18 +17,11 @@ public class Ui {
 
     private final ClientService clientService = new ClientService();
     private final ShopService shopService = new ShopService();
-    private final CashierService cashierService = new CashierService();
 
     private final ProductService productService = new ProductService();
-
-    private final ClientDao clientDao = new ClientDao();
+    
     private final Printer printer = new Printer();
 
-
-    public void initializeApp() throws FileNotFoundException, CashierNotFoundException {
-        Shop shop = shopService.initializeShop();
-
-    }
     public void start() throws FileNotFoundException, CashierNotFoundException {
         Map<Product, Integer> currentWarehouse;
         Scanner sc = new Scanner(System.in);
@@ -58,13 +50,38 @@ public class Ui {
                     displayMenu();
                 }
                 case 3 -> {
-                    shopService.getProductToTransferToClient(currentClient);
+                    Product newProduct;
+                    String reply;
+                    ClientService cs = new ClientService();
+                    do {
+                        System.out.println("Please enter product name or enter Q to exit to the main menu: ");
+                        reply = sc.nextLine();
+
+                        if (reply.equalsIgnoreCase("Q")) {
+                            break;
+                        }
+                        newProduct = shopService.getProductByName(reply);
+                        boolean productInWarehouse = shopService.isProductInWarehouse(reply);
+                        int currentCount = shopService.getCurrentProductCount(newProduct);
+                        printer.printProduct(newProduct, currentCount);
+                        if (productInWarehouse) {
+                            System.out.println("Please enter product count: ");
+                            int count = Integer.parseInt(sc.nextLine());
+                            boolean productCountEnough = shopService.isProductCountEnough(newProduct, count);
+                            if (productCountEnough) {
+                                cs.addProductToBasket(currentClient, newProduct, count);
+                                shopService.updateWarehouse(newProduct, count);
+                            } else {
+                                System.out.println("Not enough product in warehouse");
+                            }
+                        }
+                    } while (!reply.equalsIgnoreCase("Q"));;
                     System.out.println();
                     displayMenu();
                 }
                 case 4 -> {
                     shopService.processPayment(currentClient);
-                    System.out.println();
+                    System.out.println("Payment accepted");
                     displayMenu();
                 }
                 case 5 -> {
